@@ -1,0 +1,13 @@
+# skypebot
+
+django-skypehub を使ったskypebotのメモ
+
+## setup and run
+
+    git clone xxxx/skypebot
+    cd skypebot
+    virtualenv --distribute --no-site-packges pyenv
+    source pyenv/bin/activate
+    pip install Django django-skypehub Skype4py
+    python manage.py syncdb
+    python manage.py runskypebot
