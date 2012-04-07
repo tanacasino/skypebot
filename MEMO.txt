@@ -1,0 +1,56 @@
+# Skypeボットをつくっチャオ！
+
+## 概要
+
+* django-skypehubというライブラリを使うと楽
+* django-skypehubはSkypeとの通信にSkype4pyを使用
+* djangoのO/Rマッパーとかadmin画面使えるのでいろいろ楽できる
+* Skypeのbot作るにはログイン済みのSkypeアプリを起動しておく必要あり
+
+
+## 参考
+
+* Djangoのドキュメント(チュートリアルぐらいは目を通した方がよいやも)
+    * https://docs.djangoproject.com/en/1.4/
+    * DBアクセスとか参考にするのが良さそう
+* サンプル(tenki.jpにアクセスしてHTMLパース後地震速報をつぶやくサンプル)
+    * https://bitbucket.org/beproud/django-skypehub-earthquake/overview
+
+
+## Ubuntu 上に開発環境を作っチャオ！
+
+1. Skypeをインストールしチャオ！
+
+    sudo vim /etc/apt/sources.list
+    # parter レポジトリのコメントアウトを外す
+    sudo apt-get update
+    sudo apt-get install -y skype
+
+2. cloneしてきチャオ！
+
+    mkdir -p ~/Projects/
+    cd ~/Projects
+    git clone https://github.com/
+    # 場所は自由です
+
+3. virtualenvをつかっチャオ！
+
+    sudo apt-get install python-virtualenv
+    # novaの環境が入っていればすでにインストールしているはずです
+    cd ~/Projects/skypebot
+    virtualenv --no-site-packages --distribute pyenv
+    source pyenv/bin/activate
+    pip install Django django-skypehub Skype4py
+    ### 注意 ###
+    # あそこのproxy環境の場合、Djangoだけインストールに失敗することがあるようなのでDjangoだけ手動でインストール
+    # NOTE: pip と wgetは環境変数 http_proxyを自動的に見てくれます
+    pip install django-skypehub Skype4py
+    mkdir -p pyenv/build
+    cd pyenv/build/
+    wget https://www.djangoproject.com/m/releases/1.4/Django-1.4.tar.gz
+    tar xzvf Django-1.4.tar.gz
+    cd Django-1.4
+    python setup.py install
+    cd ~/Projects/skypebot/
+    deactivate
+    source pyenv/bin/activate
