@@ -31,14 +31,6 @@ LOG = logging.getLogger('skypebot.value')
 DB_LOCK = threading.Lock()
 
 
-def find_plus(body):
-    return find(body, PLUS_REGEX)
-
-
-def find_minus(body):
-    return find(body, MINUS_REGEX)
-
-
 def find(body, regex):
     msg = body.lower()
     try:
@@ -55,31 +47,26 @@ def update_value(name, update):
     return value
 
 
-def update(message, target, point):
-    value = update_value(target, point)
-    message.Chat.SendMessage(u"%s (通算 %s ポイント)" % (value.name, value.point))
-
-
-def plus(message):
-    target = find_plus(message.Body)
+def get_point(message):
+    target = find(message.Body, PLUS_REGEX)
     if target is not None:
-        LOG.debug(u"%s is point plus ++", target)
-        update(message, target, 1)
-
-
-def minus(message):
-    target = find_minus(message.Body)
+        return target, 1
+    target = find(message.Body, MINUS_REGEX)
     if target is not None:
-        LOG.debug(u"%s is point minus --", target)
-        update(message, target, -1)
+        return target, -1
+    return None, 0
 
 
 def receiver(handler, message, status):
     # メッセージ受信したときのみ
     if status != 'RECEIVED':
         return
-    plus(message)
-    minus(message)
+    target, point = get_point(message)
+    if target is not None:
+        value = update_value(target, point)
+        msg = u"%s scored %s (通算: %s)" % (target, point, value.point)
+        LOG.debug(msg)
+        message.Chat.SendMessage(msg)
 
 
 # レシーバを登録
