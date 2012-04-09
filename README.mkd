@@ -6,7 +6,7 @@ django-skypehub を使ったskypebotのメモ
 
     git clone https://github.com/tanacasino/skypebot.git
     cd skypebot
-    virtualenv --distribute --no-site-packges pyenv
+    virtualenv --distribute --no-site-packages pyenv
     source pyenv/bin/activate
     pip install Django django-skypehub Skype4py
     python manage.py syncdb
