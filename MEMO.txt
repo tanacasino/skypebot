@@ -15,25 +15,39 @@
     * DBアクセスとか参考にするのが良さそう
 * サンプル(tenki.jpにアクセスしてHTMLパース後地震速報をつぶやくサンプル)
     * https://bitbucket.org/beproud/django-skypehub-earthquake/overview
+* BeProudさんのbotを思い出しつつslideshareの紹介を見たり
 
 
 ## Ubuntu 上に開発環境を作っチャオ！
 
-1. Skypeをインストールしチャオ！
+### 1. Skypeをインストールしチャオ！
+
+永遠のベータ版 Linux Skypeをインストールする
 
     sudo vim /etc/apt/sources.list
     # parter レポジトリのコメントアウトを外す
     sudo apt-get update
     sudo apt-get install -y skype
 
-2. cloneしてきチャオ！
 
+### 2. cloneしてきチャオ！
+
+githubからソース一式を入手
+本当は下記の手順が望ましいです
+
+* githubアカウント作成(持ってればそれで)/ログイン
+* フォークする(folk from https://github.com/tanacasino/skypebot.git)
+* folkしたレポジトリをclone(https://github.com/{your_username}/skypebot.git)
+
+    # 場所は自由ですが、$HOME/Projects というディレクトリにという前提で書きます
     mkdir -p ~/Projects/
     cd ~/Projects
-    git clone https://github.com/
-    # 場所は自由です
+    git clone https://github.com/tanacasino/skypebot.git
 
-3. virtualenvをつかっチャオ！
+
+### 3. virtualenvをつかっチャオ！
+
+virtualenvを使って環境構築する
 
     sudo apt-get install python-virtualenv
     # novaの環境が入っていればすでにインストールしているはずです
@@ -43,7 +57,7 @@
     pip install Django django-skypehub Skype4py
     ### 注意 ###
     # あそこのproxy環境の場合、Djangoだけインストールに失敗することがあるようなのでDjangoだけ手動でインストール
-    # NOTE: pip と wgetは環境変数 http_proxyを自動的に見てくれます
+    # NOTE: pip と wget は環境変数 http_proxyを自動的に見てくれます
     pip install django-skypehub Skype4py
     mkdir -p pyenv/build
     cd pyenv/build/
@@ -54,3 +68,26 @@
     cd ~/Projects/skypebot/
     deactivate
     source pyenv/bin/activate
+
+
+### 4. skypebotつくっチャオ！
+
+mybotという名前のbotを作る場合のサンプル手順
+
+    cd ~/Projects/skypebot
+    source pyenv/bin/activate
+    python manage.py startapp mybot
+    # 設定ファイルにアプリケーションを追加する
+    vim skypebot/settings.py
+    # INSTALLED_APPS に 'mybot', を追加する
+
+    # bot本体を記述する (katsuo, valueからパクる)
+    vim mybot/skypebot.py
+    # DBを使う場合はmodel.pyを記述後、DB作成を実施する
+    python manage.py syncdb
+    # mybotを実行する
+    python manage.py runskypebot
+
+    # memo
+    # DB/models.pyの書き方はDjangoのドキュメント読む...
+    # Skype的な話は、Skype4Py and django-skypehubのソースを読む...
