@@ -6,11 +6,13 @@ name++
 name--
 でポイントダウン
 
++++ :  10 point
+--- : -10 point
+
 nameに使えるのは英字のみ。大文字小文字のケースは無視される。
 
-TODO コードがださいからなおす
 TODO 複数行のメッセージの場合に未対応.
-TODO +++とかで100ポイントとか
+TODO 漢字も使いたい人がいるぽい
 """
 
 # stblibs
@@ -22,10 +24,8 @@ from skypehub.handlers import on_message
 # original libs
 from models import Value
 
-
-PLUS_REGEX = re.compile("^([a-z]*)\+\+$")
-MINUS_REGEX = re.compile("^([a-z]*)--$")
-
+REGEX = re.compile("^([a-z]*)(\+{2,3}|-{2,3})$")
+POINTS = {'++': 1, '+++': 10, '--': -1, '---': -10}
 
 LOG = logging.getLogger('skypebot.value')
 DB_LOCK = threading.Lock()
@@ -34,9 +34,11 @@ DB_LOCK = threading.Lock()
 def find(body, regex):
     msg = body.lower()
     try:
-        return regex.match(msg).group(1)
+        name = regex.match(msg).group(1)
+        operator = regex.match(msg).group(2)
+        return name, operator
     except:
-        return None
+        return None, None
 
 
 def update_value(name, update):
@@ -48,19 +50,17 @@ def update_value(name, update):
 
 
 def get_point(message):
-    target = find(message.Body, PLUS_REGEX)
-    if target is not None:
-        return target, 1
-    target = find(message.Body, MINUS_REGEX)
-    if target is not None:
-        return target, -1
-    return None, 0
+    name, operator = find(message.Body, REGEX)
+    if name is None:
+        return None, 0
+    return name, POINTS[operator]
 
 
 def receiver(handler, message, status):
     # メッセージ受信したときのみ
     if status != 'RECEIVED':
         return
+    LOG.debug(u"Recieved Message: %s" % message.Body)
     target, point = get_point(message)
     if target is not None:
         value = update_value(target, point)
