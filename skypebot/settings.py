@@ -11,12 +11,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': './skypebot.db',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': './skypebot.db',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -106,7 +106,8 @@ ROOT_URLCONF = 'skypebot.urls'
 WSGI_APPLICATION = 'skypebot.wsgi.application'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Put strings here,
+    # like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
@@ -126,6 +127,7 @@ INSTALLED_APPS = (
     # skypebot
     'skypehub',
 
+    # NOTE(tanacasino) add bot apps here.
     # original
     'katsuobot',
     'value',
@@ -141,10 +143,12 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            'format': '%(levelname)s %(asctime)s %(module)s '
+                      '%(process)d %(thread)d %(message)s'
         },
         'basic': {
-            'format': '%(levelname)s %(asctime)s %(name)s %(thread)d %(message)s'
+            'format': '%(levelname)s %(asctime)s %(name)s '
+                      '%(thread)d %(message)s'
         },
     },
     'filters': {
@@ -158,9 +162,9 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'console':{
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
             'formatter': 'basic'
         },
     },
@@ -178,5 +182,5 @@ LOGGING = {
 }
 
 
-# skypebot settings
+# NOTE(tanacasino) skypebot settings
 SKYPE_KATSUO_POLL_INTERVAL = 60
