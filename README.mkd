@@ -1,6 +1,8 @@
 # skypebot
 
 django-skypehub を使ったskypebotのメモ
+Apache License 2.0
+
 
 ## setup and run
 
